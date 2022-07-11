@@ -1,16 +1,41 @@
+import Input from "@components/input";
+import useMutation from "lib/client/useMutation";
 import type { NextPage } from "next";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-interface CreateForm {
-    email?: string;
-    name?: string;
-    password?: string;
-  }
+    interface CreateForm {
+        email?: string;
+        name?: string;
+        password?: string;
+        passwordcheck?: string;
+    }
+    interface MutationResult {
+    ok: boolean;
+    }   
+
+
 const CreateAccount: NextPage = () => {
-    const [state, setState] = useState({
-      loading: false
-    });
+    // const [state, setState] = useState({
+    //   loading: false
+    // });
+    
     const {register, reset, handleSubmit} = useForm<CreateForm>();
+    const [signup, {loading, data, error}] = useMutation<MutationResult>("/api/users/signup");
+    
+    const onValid = (validForm:CreateForm) => {
+        if(validForm.password == validForm.passwordcheck )
+        {
+            signup(validForm);
+        }
+        
+      };
+    const router  = useRouter();
+    useEffect(() => {
+        if(data?.ok){
+            router.push("/");
+        }
+    }, [data, router] )
     return (
         <div className="flex w-full flex-wrap">
         
@@ -21,27 +46,12 @@ const CreateAccount: NextPage = () => {
 
             <div className="my-auto flex flex-col justify-center px-8 pt-8 md:justify-start md:px-24 md:pt-0 lg:px-32">
             <p className="text-center text-3xl">Join Muitter</p>
-            <form className="flex flex-col pt-3 md:pt-8" >
-                <div className="flex flex-col pt-4">
-                <div className="text-lg">Name</div>
-                <input type="text" id="name" placeholder="John Smith" className=" mt-1 w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow " />
-                </div>
+            <form  onSubmit={ handleSubmit(onValid) } className="flex flex-col pt-3 md:pt-8" >
 
-                <div className="flex flex-col pt-4">
-                <div className="text-lg">Email</div>
-                <input type="email" id="email" placeholder="your@email.com" className=" mt-1 w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow " />
-                </div>
-
-                <div className="flex flex-col pt-4">
-                <div className="text-lg">Password</div>
-                <input type="password" id="password" placeholder="Password" className=" mt-1 w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow " />
-                </div>
-
-                <div className="flex flex-col pt-4">
-                <div className="text-lg">Confirm Password</div>
-                <input type="password" id="confirm-password" placeholder="Password" className=" mt-1 w-full appearance-none rounded border py-2 px-3 leading-tight text-gray-700 shadow " />
-                </div>
-
+                <Input register={register("name")}  name="name" label="Name" type="text" placed="your name" required />
+                <Input register={register("email")} name="email" label="Email address" type="email" placed="sample@naver.com" required />
+                <Input register={register("password")}  name="password" label="Password" type="password"  required />
+                <Input register={register("passwordcheck")}  name="password-confirm" label="Confirm Password" type="password" required />                
                 <input type="submit" value="Register" className="mt-8 bg-black p-2 text-lg font-bold text-white hover:bg-gray-600" />
             </form>
             <div className="pt-12 pb-12 text-center">
