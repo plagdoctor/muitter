@@ -37,3 +37,6 @@ yarn-error.log*
 
 # api 
 api.http
+
+# db
+*.db

@@ -57,10 +57,11 @@ const CreateAccount: NextPage = () => {
                 <Input register={register("email")} name="email" label="Email address" type="email" placed="sample@naver.com" required />
                 <Input register={register("password")}  name="password" label="Password" type="password"  required />
                 <Input register={register("passwordcheck")}  name="password-confirm" label="Confirm Password" type="password" required />                
-                <input type="submit" value="Register" className="mt-8 bg-black p-2 text-lg font-bold text-white hover:bg-gray-600" />
-                <div>{data?.ok ? "" :
+                <div className=" text-red-400">{data?.ok ? "" :
                     data?.message}
                 </div>
+
+                <input type="submit" value="Register" className="mt-8 bg-black p-2 text-lg font-bold text-white hover:bg-gray-600" />
             </form>
             <div className="pt-12 pb-12 text-center">
                 <p>Already have an account? </p>

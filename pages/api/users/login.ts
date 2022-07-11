@@ -9,32 +9,27 @@ async function handler(
     if(req.method ==="POST"){
         const {
             //session: {user},
-            body: {email, name, password},
+            body: {email, password},
         } =req;
      
-        const validUser = await client.user.findUnique({
+        const validUser = await client.user.findFirst({
             where: {
-                email
+                email:email,
+                password: password,
             }
         });
 
-        if(validUser?.name){
+        if(!validUser){
             return res.json({
                 ok:false,
-                message:`It's already Signed up. ${validUser?.name}`
+                message: "password doesn't match or no email exists."
                 });
         }
 
-        console.log("it's good to create")
-        const user = await client.user.create({
-            data: {
-                name,
-                email,
-                password
-            },
-        });        
+        console.log("it's good to login")
+
         req.session.user = {
-            id : user.id
+            id : validUser.id
         };
 
         await req.session.save();

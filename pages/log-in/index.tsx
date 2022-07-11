@@ -1,22 +1,41 @@
 import Input from "@components/input";
+import useMutation from "@libs/client/useMutation";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 interface EnterForm {
     email?: string;
     password?: string;
   }
+
+interface MutationResult {
+ok: boolean;
+message: string;
+}   
+
+
 const Login: NextPage = () => {
 
-    const {register} = useForm<EnterForm>();
+    const [login, {loading, data}] = useMutation<MutationResult>("/api/users/login");
     
-    const router  = useRouter();        
+    const router  = useRouter();  
+    const {register, handleSubmit} = useForm<EnterForm>();
+    const onValid = (validForm:EnterForm) => {
+        if(loading) return;
+
+        login(validForm);
+      };          
     const onClickToSignup = () =>{
 
         router.push("/create-account");
     };
-
+    useEffect(() => {
+        if(data?.ok){
+            router.push("/");
+        }
+    }, [data, router] )
     return (
         <div className="flex w-full flex-wrap">
         
@@ -27,9 +46,12 @@ const Login: NextPage = () => {
 
             <div className="my-auto flex flex-col justify-center px-8 pt-8 md:justify-start md:px-24 md:pt-0 lg:px-32">
             <p className="text-center text-3xl">Enter to Muitter</p>
-            <form className="flex flex-col pt-3 md:pt-8" >
+            <form  onSubmit={ handleSubmit(onValid) } className="flex flex-col pt-3 md:pt-8" >
                 <Input register={register("email")}  name="email" label="Email Adress" type="text" placed="your name" required />
                 <Input register={register("password")}  name="password" label="Password" type="password"  required />
+                <div className=" text-red-400"> {data?.ok ? "" :
+                    data?.message}
+                </div>   
                 <input type="submit" value="Log in" className="mt-8 bg-black p-2 text-lg font-bold text-white hover:bg-gray-600" />
             </form>
             <div className="pt-12 pb-12 text-center">

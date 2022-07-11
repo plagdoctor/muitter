@@ -3,6 +3,7 @@ import Link from "next/link";
 import { cls } from "../libs/client/utils";
 import { useRouter } from "next/router";
 import Head from "next/head";
+import Image from "next/image";
 
 interface LayoutProps {
   title?: string;
@@ -30,6 +31,7 @@ export default function Layout({
       </Head>
       <div className=" flex w-full flex-wrap">
             <div className="flex w-full flex-col md:w-1/2">
+                
                 <div className="bg-white w-full h-12 md:w-1/2 justify-center text-lg px-10 font-medium  fixed text-gray-800 border-b top-0  flex items-center">
                     {canGoBack ? (
                     <button onClick={onClick} className="absolute left-4">
@@ -55,7 +57,7 @@ export default function Layout({
                 </div>
                 <div className={cls("pt-12", hasTabBar ? "pb-24" : "")}>{children}</div>
                 {hasTabBar ? (
-                    <nav className="bg-white md:w-1/2 text-gray-700 border-t fixed bottom-0 w-full px-10 pb-5 pt-3 flex justify-between text-xs">
+                    <nav className="bg-white md:w-1/2 text-gray-700 border-t fixed bottom-0 w-full px-20 pb-5 pt-3 flex justify-between text-xs">
                     <Link href="/">
                         <a
                         className={cls(
@@ -83,11 +85,11 @@ export default function Layout({
                         </a>
                     </Link>
 
-                    <Link href="/chats">
+                    <Link href="/tweet/upload">
                         <a
                         className={cls(
                             "flex flex-col items-center space-y-2 ",
-                            router.pathname === "/chats"
+                            router.pathname === "/tweet/upload"
                             ? "text-orange-500"
                             : "hover:text-gray-500 transition-colors"
                         )}
@@ -106,11 +108,11 @@ export default function Layout({
                             d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
                             ></path>
                         </svg>
-                        <span>twit</span>
+                        <span>tweet</span>
                         </a>
                     </Link>
 
-                    <Link href="/profile">
+                    <Link href="/">
                         <a
                         className={cls(
                             "flex flex-col items-center space-y-2 ",
