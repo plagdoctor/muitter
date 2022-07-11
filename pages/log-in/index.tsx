@@ -1,6 +1,6 @@
 import Input from "@components/input";
 import type { NextPage } from "next";
-import { useState } from "react";
+import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 
 interface EnterForm {
@@ -9,7 +9,14 @@ interface EnterForm {
   }
 const Login: NextPage = () => {
 
-    const {register, reset, handleSubmit} = useForm<EnterForm>();
+    const {register} = useForm<EnterForm>();
+    
+    const router  = useRouter();        
+    const onClickToSignup = () =>{
+
+        router.push("/create-account");
+    };
+
     return (
         <div className="flex w-full flex-wrap">
         
@@ -27,13 +34,13 @@ const Login: NextPage = () => {
             </form>
             <div className="pt-12 pb-12 text-center">
                 <p>Don't you have an account? </p>
-                <div className="font-semibold underline">Sign up here.</div>
+                <div onClick={onClickToSignup} className="font-semibold underline">Sign up here.</div>
             </div>
             </div>
         </div>
 
         <div className="w-1/2 shadow-2xl">
-            <img className=" hidden h-screen w-full object-cover md:block" src="https://source.unsplash.com/IXUM4cJynP0" alt="Background" />
+            <img className=" hidden h-screen w-full object-cover md:block" src="https://source.unsplash.com/random/1920" alt="Background" />
         </div>
         </div>
 

@@ -1,8 +1,8 @@
 import Input from "@components/input";
-import useMutation from "lib/client/useMutation";
+import useMutation from "@libs/client/useMutation";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
     interface CreateForm {
         email?: string;
@@ -12,6 +12,7 @@ import { useForm } from "react-hook-form";
     }
     interface MutationResult {
     ok: boolean;
+    message: string;
     }   
 
 
@@ -20,9 +21,9 @@ const CreateAccount: NextPage = () => {
     //   loading: false
     // });
     
-    const {register, reset, handleSubmit} = useForm<CreateForm>();
+    const {register, handleSubmit} = useForm<CreateForm>();
     const [signup, {loading, data, error}] = useMutation<MutationResult>("/api/users/signup");
-    
+
     const onValid = (validForm:CreateForm) => {
         if(validForm.password == validForm.passwordcheck )
         {
@@ -30,7 +31,11 @@ const CreateAccount: NextPage = () => {
         }
         
       };
-    const router  = useRouter();
+    const router  = useRouter();    
+    const onClickToLogin = () =>{
+
+        router.push("/log-in");
+    };
     useEffect(() => {
         if(data?.ok){
             router.push("/");
@@ -53,16 +58,19 @@ const CreateAccount: NextPage = () => {
                 <Input register={register("password")}  name="password" label="Password" type="password"  required />
                 <Input register={register("passwordcheck")}  name="password-confirm" label="Confirm Password" type="password" required />                
                 <input type="submit" value="Register" className="mt-8 bg-black p-2 text-lg font-bold text-white hover:bg-gray-600" />
+                <div>{data?.ok ? "" :
+                    data?.message}
+                </div>
             </form>
             <div className="pt-12 pb-12 text-center">
                 <p>Already have an account? </p>
-                <div className="font-semibold underline">Log in here.</div>
+                <div onClick={onClickToLogin} className="font-semibold underline">Log in here.</div>
             </div>
             </div>
         </div>
 
         <div className="w-1/2 shadow-2xl">
-            <img className=" hidden h-screen w-full object-cover md:block" src="https://source.unsplash.com/IXUM4cJynP0" alt="Background" />
+            <img className=" hidden h-screen w-full object-cover md:block" src="https://source.unsplash.com/random/1920" alt="Background" />
         </div>
         </div>
 
