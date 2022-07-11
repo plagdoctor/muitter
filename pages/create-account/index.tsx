@@ -1,9 +1,16 @@
 import type { NextPage } from "next";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+interface CreateForm {
+    email?: string;
+    name?: string;
+    password?: string;
+  }
 const CreateAccount: NextPage = () => {
     const [state, setState] = useState({
       loading: false
     });
+    const {register, reset, handleSubmit} = useForm<CreateForm>();
     return (
         <div className="flex w-full flex-wrap">
         
@@ -38,7 +45,8 @@ const CreateAccount: NextPage = () => {
                 <input type="submit" value="Register" className="mt-8 bg-black p-2 text-lg font-bold text-white hover:bg-gray-600" />
             </form>
             <div className="pt-12 pb-12 text-center">
-                <p>Already have an account? <div className="font-semibold underline">Log in here.</div></p>
+                <p>Already have an account? </p>
+                <div className="font-semibold underline">Log in here.</div>
             </div>
             </div>
         </div>
